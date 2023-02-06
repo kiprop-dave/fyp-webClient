@@ -16,6 +16,7 @@ function useMqtt() {
   const [avianHum, setAvianHum] = useState<number[]>([]);
   const [reptTemp, setReptTemp] = useState<number[]>([]);
   const [reptHum, setReptHum] = useState<number[]>([]);
+  const [labels, setLabels] = useState<string[]>([]);
 
   useEffect(() => {
     const client = mqtt.connect(wsUrl, connectionOptions);
@@ -38,11 +39,12 @@ function useMqtt() {
         setAvianHum((prev) => [...prev, received.sensorOne.humidity]);
         setReptTemp((prev) => [...prev, received.sensorTwo.temperature]);
         setReptHum((prev) => [...prev, received.sensorTwo.humidity]);
+        setLabels((prev) => [...prev, new Date().toLocaleTimeString()]);
       });
     }
   }, [mqttClient]);
 
-  return [avianTemp, avianHum, reptTemp, reptHum];
+  return { avianTemp, avianHum, reptTemp, reptHum, labels };
 }
 
 export default useMqtt;
