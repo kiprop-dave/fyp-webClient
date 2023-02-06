@@ -6,15 +6,13 @@ const loginSchema = z.object({
 });
 
 const mqttMessageSchema = z.object({
-  reading: z.object({
-    sensorOne: z.object({
-      temperature: z.number().min(0).max(100),
-      humidity: z.number().min(0).max(100),
-    }),
-    sensorTwo: z.object({
-      temperature: z.number().min(0).max(100),
-      humidity: z.number().min(0).max(100),
-    }),
+  sensorOne: z.object({
+    temperature: z.number().min(0).max(100),
+    humidity: z.number().min(0).max(100),
+  }),
+  sensorTwo: z.object({
+    temperature: z.number().min(0).max(100),
+    humidity: z.number().min(0).max(100),
   }),
 });
 

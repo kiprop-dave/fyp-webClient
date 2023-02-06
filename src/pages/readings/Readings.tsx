@@ -6,6 +6,7 @@ import { AxiosError } from "axios";
 import useAuth from "../../context/authContext";
 import styles from "./Readings.module.css";
 import ChartComponent from "../../components/Chart/Chart";
+import useMqtt from "../../hooks/UseMqtt";
 
 function Readings() {
   const auth = useAuth();
@@ -16,6 +17,10 @@ function Readings() {
     temperatureReadings: [],
     humidityReadings: [],
   });
+
+  const [avianTemp, avianHum, reptTemp, reptHum] = useMqtt();
+  console.log(avianTemp);
+
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
