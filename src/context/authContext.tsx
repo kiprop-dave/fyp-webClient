@@ -1,8 +1,9 @@
 import { createContext, useState, useContext } from "react";
+import { AuthResponse } from "../types/types";
 
 interface AuthContextProps {
-  token: string | null;
-  setToken: (token: string) => void;
+  credentials: AuthResponse | null;
+  setCredentials: (credentials: AuthResponse) => void;
 }
 
 type contextProps = {
@@ -12,11 +13,11 @@ type contextProps = {
 const AuthContext = createContext<AuthContextProps | null>(null);
 
 export function AuthProvider({ children }: contextProps) {
-  const [token, setToken] = useState<string | null>(null);
+  const [credentials, setCredentials] = useState<AuthResponse | null>(null);
 
   const values: AuthContextProps = {
-    token,
-    setToken,
+    credentials,
+    setCredentials,
   };
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }

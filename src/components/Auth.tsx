@@ -5,12 +5,12 @@ import useAuth from "../context/authContext";
 function Auth() {
   const auth = useAuth();
   if (!auth) return null;
-  const { token } = auth;
+  const { credentials } = auth;
   const location = useLocation();
 
   return (
     <>
-      {token ? (
+      {credentials ? (
         <Outlet />
       ) : (
         <Navigate to="/login" state={{ from: location }} replace={true} />

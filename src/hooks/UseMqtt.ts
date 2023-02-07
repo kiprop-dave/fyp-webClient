@@ -1,15 +1,22 @@
 import * as mqtt from "mqtt/dist/mqtt.min";
 import { useEffect, useState } from "react";
-import { mqttMessageSchema, MqttMessage } from "../types/types";
+import { MqttMessage } from "../types/types";
+import useAuth from "../context/authContext";
 
 function useMqtt() {
-  const wsUrl = "ws://localhost:8083/mqtt";
+  const auth = useAuth();
+  if (!auth) return null;
+  const { credentials } = auth;
+  if (!credentials) return null;
+
+  const wsUrl = credentials.brokerUrl;
   const connectionOptions: mqtt.IClientOptions = {
     clientId: "web-client",
     clean: false,
     connectTimeout: 4000,
     keepalive: 60,
-    username: "admin",
+    username: credentials.mqttUsername,
+    password: credentials.mqttPassword,
   };
   const [mqttClient, setMqttClient] = useState<mqtt.MqttClient | null>(null);
   const [avianTemp, setAvianTemp] = useState<number[]>([]);

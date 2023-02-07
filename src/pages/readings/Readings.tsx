@@ -4,7 +4,9 @@ import useMqtt from "../../hooks/UseMqtt";
 import useData from "../../hooks/UseData";
 
 function Readings() {
-  const { avianTemp, avianHum, reptTemp, reptHum, labels } = useMqtt();
+  const mqtt = useMqtt();
+  if (!mqtt) return null;
+  const { avianTemp, avianHum, reptTemp, reptHum, labels } = mqtt;
   const data = useData();
   if (!data) return null;
   const {

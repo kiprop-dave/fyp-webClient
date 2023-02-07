@@ -8,7 +8,7 @@ import useAuth from "../context/authContext";
 function useData() {
   const auth = useAuth();
   if (!auth) return null;
-  const { token } = auth;
+  const { credentials } = auth;
 
   const [readings, setReadings] = useState<Reading>({
     temperatureReadings: [],
@@ -23,9 +23,15 @@ function useData() {
 
   async function getReadings() {
     try {
+      if (!credentials) {
+        setIsError(true);
+        setErrorMessage("No credentials found");
+        return;
+      }
+
       let res = await api.get("/api/readings", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${credentials.token}`,
         },
       });
       const data = readingsSchema.parse(res.data);

@@ -27,9 +27,22 @@ const allReadingsSchema = z.object({
   humidityReadings: z.array(dataSchema),
 });
 
+const authResponseSchema = z.object({
+  token: z.string(),
+  brokerUrl: z.string(),
+  mqttUsername: z.string(),
+  mqttPassword: z.string(),
+});
+
 export type Login = z.infer<typeof loginSchema>;
 export type MqttMessage = z.infer<typeof mqttMessageSchema>;
 export type Data = z.infer<typeof dataSchema>;
 export type Reading = z.infer<typeof allReadingsSchema>;
+export type AuthResponse = z.infer<typeof authResponseSchema>;
 
-export { loginSchema, mqttMessageSchema, allReadingsSchema as readingsSchema };
+export {
+  loginSchema,
+  mqttMessageSchema,
+  allReadingsSchema as readingsSchema,
+  authResponseSchema,
+};

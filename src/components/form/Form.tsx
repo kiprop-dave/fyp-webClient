@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Login, loginSchema } from "../../types/types";
+import { Login, loginSchema, authResponseSchema } from "../../types/types";
 import { z } from "zod";
 import styles from "./form.module.css";
 import api from "../../api/axios";
@@ -14,7 +14,7 @@ function Form() {
   });
   const auth = useAuth();
   if (!auth) return null;
-  const { setToken } = auth;
+  const { setCredentials } = auth;
   const navigate = useNavigate();
 
   const [isError, setIsError] = useState<boolean>(false);
@@ -39,7 +39,8 @@ function Form() {
           withCredentials: false,
         }
       );
-      setToken(response.data.token);
+      const credentials = authResponseSchema.parse(response.data);
+      setCredentials(credentials);
       navigate("/readings", { replace: true });
     } catch (error) {
       if (error instanceof z.ZodError) {
