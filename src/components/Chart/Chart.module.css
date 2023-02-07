@@ -5,4 +5,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #093545;
+}
+
+@media screen and (max-width:768px) {
+    .chartContainer{
+        width: 100%;
+    }
 }

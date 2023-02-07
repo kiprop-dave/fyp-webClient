@@ -23,7 +23,7 @@ function Readings() {
         <h1>ANALYTICS</h1>
       </header>
       <div className={styles.container}>
-        <h2>LIVE FEED FROM HATCHERY</h2>
+        <h2 className={styles.title}>LIVE FEED FROM HATCHERY</h2>
         <div className={styles.live}>
           <ChartComponent
             label="AVIAN UNIT"
@@ -42,7 +42,7 @@ function Readings() {
             errorMessage={errorMessage}
           />
         </div>
-        <h2>READINGS FROM THE PAST 24 HOURS</h2>
+        <h2 className={styles.title}>READINGS FROM THE PAST 24 HOURS</h2>
         <div className={styles.previous}>
           <ChartComponent
             label="AVIAN UNIT"
