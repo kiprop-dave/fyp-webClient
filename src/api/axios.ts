@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:5000";
+const baseURL = "https://fyp-server-production.up.railway.app";
 
 const api = axios.create({
   baseURL,
