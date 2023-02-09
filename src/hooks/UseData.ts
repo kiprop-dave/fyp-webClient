@@ -16,6 +16,7 @@ function useData() {
   });
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getReadings();
@@ -27,15 +28,17 @@ function useData() {
         setIsError(true);
         setErrorMessage("No credentials found");
         return;
+      } else {
+        setIsLoading(true);
+        let res = await api.get("/api/readings", {
+          headers: {
+            Authorization: `Bearer ${credentials.token}`,
+          },
+        });
+        const data = readingsSchema.parse(res.data);
+        setReadings(data);
+        setIsLoading(false);
       }
-
-      let res = await api.get("/api/readings", {
-        headers: {
-          Authorization: `Bearer ${credentials.token}`,
-        },
-      });
-      const data = readingsSchema.parse(res.data);
-      setReadings(data);
     } catch (error) {
       if (error instanceof AxiosError) {
         setIsError(true);
@@ -71,6 +74,7 @@ function useData() {
     storedLabels,
     isError,
     errorMessage,
+    isLoading,
   };
 }
 
