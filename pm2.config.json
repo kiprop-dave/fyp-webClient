@@ -1,0 +1,10 @@
+{
+    "apps": [
+        {
+            "name":"monitor-web-client",
+            "script": "npm",
+            "interpreter": "none",
+            "args": "run preview"
+        }
+    ]
+}
