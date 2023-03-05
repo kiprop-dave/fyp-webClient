@@ -10,7 +10,7 @@ function Login() {
         <p className={styles.description}>Sign in to your account</p>
         <Form />
       </div>
-      <img src="/Vectors.png" alt="" className={styles.bgPic} />
+      <img src="/Vectors.png" alt="background pic" className={styles.bgPic} />
     </main>
   );
 }

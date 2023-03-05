@@ -16,15 +16,16 @@ const mqttMessageSchema = z.object({
   }),
 });
 
-const dataSchema = z.object({
+const readingSchema = z.object({
   _id: z.string(),
-  sensorOne: z.number().min(0).max(100),
-  sensorTwo: z.number().min(0).max(100),
+  avianTemp: z.number().min(0).max(100),
+  avianHum: z.number().min(0).max(100),
+  reptTemp: z.number().min(0).max(100),
+  reptHum: z.number().min(0).max(100),
 });
 
-const allReadingsSchema = z.object({
-  temperatureReadings: z.array(dataSchema),
-  humidityReadings: z.array(dataSchema),
+const readingResponse = z.object({
+  readings: z.array(readingSchema),
 });
 
 const authResponseSchema = z.object({
@@ -36,13 +37,12 @@ const authResponseSchema = z.object({
 
 export type Login = z.infer<typeof loginSchema>;
 export type MqttMessage = z.infer<typeof mqttMessageSchema>;
-export type Data = z.infer<typeof dataSchema>;
-export type Reading = z.infer<typeof allReadingsSchema>;
+export type Reading = z.infer<typeof readingResponse>;
 export type AuthResponse = z.infer<typeof authResponseSchema>;
 
 export {
   loginSchema,
   mqttMessageSchema,
-  allReadingsSchema as readingsSchema,
+  readingResponse as readingsSchema,
   authResponseSchema,
 };

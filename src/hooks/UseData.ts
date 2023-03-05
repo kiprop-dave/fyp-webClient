@@ -7,13 +7,9 @@ import useAuth from "../context/authContext";
 
 function useData() {
   const auth = useAuth();
-  if (!auth) return null;
   const { credentials } = auth;
 
-  const [readings, setReadings] = useState<Reading>({
-    temperatureReadings: [],
-    humidityReadings: [],
-  });
+  const [readings, setReadings] = useState<Reading>({ readings: [] });
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -50,19 +46,15 @@ function useData() {
     }
   }
 
-  const avianTemperature = readings.temperatureReadings.map(
-    (reading) => reading.sensorOne
+  const avianTemperature = readings.readings.map(
+    (reading) => reading.avianTemp
   );
-  const avianHumidity = readings.humidityReadings.map(
-    (reading) => reading.sensorOne
+  const avianHumidity = readings.readings.map((reading) => reading.avianHum);
+  const reptileTemperature = readings.readings.map(
+    (reading) => reading.reptTemp
   );
-  const reptileTemperature = readings.temperatureReadings.map(
-    (reading) => reading.sensorTwo
-  );
-  const reptileHumidity = readings.humidityReadings.map(
-    (reading) => reading.sensorTwo
-  );
-  const storedLabels = readings.temperatureReadings.map((reading) =>
+  const reptileHumidity = readings.readings.map((reading) => reading.reptHum);
+  const storedLabels = readings.readings.map((reading) =>
     new Date(reading._id).toLocaleTimeString()
   );
 

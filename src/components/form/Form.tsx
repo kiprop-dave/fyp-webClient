@@ -6,6 +6,7 @@ import api from "../../api/axios";
 import { AxiosError } from "axios";
 import useAuth from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader/Loader";
 
 function Form() {
   const [loginData, setLoginData] = useState<Login>({
@@ -13,12 +14,12 @@ function Form() {
     password: "",
   });
   const auth = useAuth();
-  if (!auth) return null;
   const { setCredentials } = auth;
   const navigate = useNavigate();
 
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isError) setIsError(false);
@@ -29,6 +30,7 @@ function Form() {
     e.preventDefault();
     try {
       loginSchema.parse(loginData);
+      setIsLoading(true);
       const response = await api.post(
         "/admin/login",
         JSON.stringify(loginData),
@@ -36,11 +38,12 @@ function Form() {
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: false,
+          withCredentials: true,
         }
       );
       const credentials = authResponseSchema.parse(response.data);
       setCredentials(credentials);
+      setIsLoading(false);
       navigate("/readings", { replace: true });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -49,14 +52,21 @@ function Form() {
       } else if (error instanceof AxiosError) {
         setIsError(true);
         setErrorMessage(error.response?.data.message);
+      } else {
+        setIsError(true);
+        setErrorMessage("Something went wrong");
       }
     }
   };
 
   return (
     <div className={styles.container}>
+      {isLoading && <Loader />}
       {isError && <div className={styles.error}>{errorMessage}</div>}
       <form onSubmit={handleSubmit} className={styles.form}>
+        <label htmlFor="email" className={styles.label}>
+          Email
+        </label>
         <input
           type="text"
           name="email"
@@ -65,6 +75,9 @@ function Form() {
           onChange={handleChange}
           className={styles.input}
         />
+        <label htmlFor="password" className={styles.label}>
+          Password
+        </label>
         <input
           type="password"
           name="password"
@@ -73,8 +86,8 @@ function Form() {
           onChange={handleChange}
           className={styles.input}
         />
-        <button type="submit" className={styles.submit}>
-          Submit
+        <button type="submit" className={styles.submit} aria-label="sign in">
+          Sign in
         </button>
       </form>
     </div>

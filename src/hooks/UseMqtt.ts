@@ -5,7 +5,6 @@ import useAuth from "../context/authContext";
 
 function useMqtt() {
   const auth = useAuth();
-  if (!auth) return null;
   const { credentials } = auth;
   if (!credentials) return null;
 

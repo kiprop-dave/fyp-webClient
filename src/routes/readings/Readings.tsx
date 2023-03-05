@@ -9,7 +9,6 @@ function Readings() {
   if (!mqtt) return null;
   const { avianTemp, avianHum, reptTemp, reptHum, labels } = mqtt;
   const data = useData();
-  if (!data) return null;
   const {
     avianTemperature,
     avianHumidity,
