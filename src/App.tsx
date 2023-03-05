@@ -3,8 +3,8 @@ import Auth from "./components/Auth";
 import { Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader/Loader";
 
-const Login = lazy(() => import("./pages/login/Login"));
-const Readings = lazy(() => import("./pages/readings/Readings"));
+const Login = lazy(() => import("./routes/login/Login"));
+const Readings = lazy(() => import("./routes/readings/Readings"));
 
 function App() {
   return (
