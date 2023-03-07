@@ -26,7 +26,7 @@ function useData() {
         return;
       } else {
         setIsLoading(true);
-        let res = await api.get("/api/readings", {
+        let res = await api.get("/api/readings/day", {
           headers: {
             Authorization: `Bearer ${credentials.token}`,
           },
@@ -46,13 +46,9 @@ function useData() {
     }
   }
 
-  const avianTemperature = readings.readings.map(
-    (reading) => reading.avianTemp
-  );
+  const avianTemperature = readings.readings.map((reading) => reading.avianTemp);
   const avianHumidity = readings.readings.map((reading) => reading.avianHum);
-  const reptileTemperature = readings.readings.map(
-    (reading) => reading.reptTemp
-  );
+  const reptileTemperature = readings.readings.map((reading) => reading.reptTemp);
   const reptileHumidity = readings.readings.map((reading) => reading.reptHum);
   const storedLabels = readings.readings.map((reading) =>
     new Date(reading._id).toLocaleTimeString()
