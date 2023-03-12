@@ -8,6 +8,16 @@ import useAuth from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Loader/Loader";
 
+/*
+ * This is the form component
+ * It is used to display the login form
+ *The form is validated using zod
+ *The user can login using their email and password
+ *The handleSubmit function is called when the form is submitted
+ *The handleSubmit function will send a POST request to the server
+ *The handleSubmit function will then set the credentials in the authentication context
+ *The handleSubmit function will then redirect the user to the readings page
+ */
 function Form() {
   const [loginData, setLoginData] = useState<Login>({
     email: "",
@@ -31,16 +41,12 @@ function Form() {
     try {
       loginSchema.parse(loginData);
       setIsLoading(true);
-      const response = await api.post(
-        "/admin/login",
-        JSON.stringify(loginData),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await api.post("/admin/login", JSON.stringify(loginData), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
       const credentials = authResponseSchema.parse(response.data);
       setCredentials(credentials);
       setIsLoading(false);

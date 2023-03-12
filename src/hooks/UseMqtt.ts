@@ -1,8 +1,13 @@
 import * as mqtt from "mqtt/dist/mqtt.min";
 import { useEffect, useState } from "react";
-import { MqttMessage } from "../types/types";
+import { MqttData, mqttMessageSchema } from "../types/types";
 import useAuth from "../context/authContext";
 
+/*
+ *This hook is used to connect to the mqtt broker and subscribe to the readings topic.
+ *It then parses the incoming messages and stores them in state.
+ *It also returns the data in a format that can be used by the chart component.
+ */
 function useMqtt() {
   const auth = useAuth();
   const { credentials } = auth;
@@ -10,47 +15,68 @@ function useMqtt() {
 
   const wsUrl = credentials.brokerUrl;
   const connectionOptions: mqtt.IClientOptions = {
-    clientId: "web-client",
+    clientId: "web-client" + Math.random().toString(16).substring(2, 8),
     clean: false,
     connectTimeout: 4000,
     keepalive: 60,
     username: credentials.mqttUsername,
     password: credentials.mqttPassword,
   };
-  const [mqttClient, setMqttClient] = useState<mqtt.MqttClient | null>(null);
-  const [avianTemp, setAvianTemp] = useState<number[]>([]);
-  const [avianHum, setAvianHum] = useState<number[]>([]);
-  const [reptTemp, setReptTemp] = useState<number[]>([]);
-  const [reptHum, setReptHum] = useState<number[]>([]);
-  const [labels, setLabels] = useState<string[]>([]);
 
+  /*
+   *useState is a function provided by react that allows us to store data that can change over time.
+   *The 1st argument is the current value of the state and the 2nd argument is a function that
+   *allows us to change the value of the state.
+   */
+  const [mqttClient, setMqttClient] = useState<mqtt.MqttClient | null>(null);
+  const [mqttData, setMqttData] = useState<MqttData>({
+    avianTemp: [],
+    avianHum: [],
+    reptTemp: [],
+    reptHum: [],
+    labels: [],
+  });
+
+  const topics: mqtt.ISubscriptionMap = {
+    readings: { qos: 1 },
+  };
+
+  /*
+   *useEffect is a function that allows us to run code when the component is mounted and when the
+   *items in the depenedency array change.
+   *It returns a function that is run when the component is unmounted.
+   *This will run once when the component is mounted since the dependency array is empty.
+   */
   useEffect(() => {
     const client = mqtt.connect(wsUrl, connectionOptions);
+    client.on("connect", () => client.subscribe(topics));
     setMqttClient(client);
     return () => {
       client.end();
     };
   }, []);
 
-  const topics: mqtt.ISubscriptionMap = {
-    readings: { qos: 1 },
-  };
-
+  /*
+   *This useEffect will run when the mqttClient changes.
+   */
   useEffect(() => {
     if (mqttClient) {
-      mqttClient.subscribe(topics);
       mqttClient.on("message", (topic, message) => {
-        const received: MqttMessage = JSON.parse(message.toString());
-        setAvianTemp((prev) => [...prev, received.sensorOne.temperature]);
-        setAvianHum((prev) => [...prev, received.sensorOne.humidity]);
-        setReptTemp((prev) => [...prev, received.sensorTwo.temperature]);
-        setReptHum((prev) => [...prev, received.sensorTwo.humidity]);
-        setLabels((prev) => [...prev, new Date().toLocaleTimeString()]);
+        if (topic === "readings") {
+          const received = mqttMessageSchema.parse(JSON.parse(message.toString()));
+          setMqttData((prev) => ({
+            avianTemp: [...prev.avianTemp, received.sensorOne.temperature],
+            avianHum: [...prev.avianHum, received.sensorOne.humidity],
+            reptTemp: [...prev.reptTemp, received.sensorTwo.temperature],
+            reptHum: [...prev.reptHum, received.sensorTwo.humidity],
+            labels: [...prev.labels, new Date().toLocaleTimeString()],
+          }));
+        }
       });
     }
   }, [mqttClient]);
 
-  return { avianTemp, avianHum, reptTemp, reptHum, labels };
+  return mqttData;
 }
 
 export default useMqtt;

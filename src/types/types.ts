@@ -35,14 +35,18 @@ const authResponseSchema = z.object({
   mqttPassword: z.string(),
 });
 
+const mqttData = z.object({
+  avianTemp: z.array(z.number()),
+  avianHum: z.array(z.number()),
+  reptTemp: z.array(z.number()),
+  reptHum: z.array(z.number()),
+  labels: z.array(z.string()),
+});
+
 export type Login = z.infer<typeof loginSchema>;
 export type MqttMessage = z.infer<typeof mqttMessageSchema>;
 export type Reading = z.infer<typeof readingResponse>;
 export type AuthResponse = z.infer<typeof authResponseSchema>;
+export type MqttData = z.infer<typeof mqttData>;
 
-export {
-  loginSchema,
-  mqttMessageSchema,
-  readingResponse as readingsSchema,
-  authResponseSchema,
-};
+export { loginSchema, mqttMessageSchema, readingResponse as readingsSchema, authResponseSchema };

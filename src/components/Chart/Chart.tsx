@@ -11,15 +11,7 @@ import {
 import { Line } from "react-chartjs-2";
 import styles from "./Chart.module.css";
 
-Chartjs.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+Chartjs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface ChartProps {
   label: string;
@@ -30,14 +22,12 @@ interface ChartProps {
   errorMessage: string;
 }
 
-const ChartComponent = ({
-  label,
-  labels,
-  temperature,
-  humidity,
-  isError,
-  errorMessage,
-}: ChartProps) => {
+/*
+ * This is the chart component
+ * It is used to display the temperature and humidity data
+ */
+const ChartComponent = (props: ChartProps) => {
+  const { label, temperature, humidity, labels, isError, errorMessage } = props;
   const options = {
     responsive: true,
     plugins: {

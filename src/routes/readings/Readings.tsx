@@ -4,6 +4,13 @@ import useMqtt from "../../hooks/UseMqtt";
 import useData from "../../hooks/UseData";
 import Loader from "../../components/Loader/Loader";
 
+/*
+ * This is the readings page
+ * There are 4 charts on this page
+ * 2 charts for the live feed from the hatchery
+ * 2 charts for the readings from the past 24 hours
+ * The charts are rendered using the ChartComponent
+ */
 function Readings() {
   const mqtt = useMqtt();
   if (!mqtt) return null;

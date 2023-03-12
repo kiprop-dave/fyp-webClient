@@ -5,6 +5,11 @@ import api from "../api/axios";
 import { AxiosError } from "axios";
 import useAuth from "../context/authContext";
 
+/*
+ *This hook is used to fetch previous readings from the database and store them in state.
+ *The web token is sent in the header of the request to authorize the request.
+ *It also returns the data in a format that can be used by the chart component.
+ */
 function useData() {
   const auth = useAuth();
   const { credentials } = auth;
