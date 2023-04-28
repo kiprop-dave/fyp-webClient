@@ -65,10 +65,10 @@ function useMqtt() {
         if (topic === "readings") {
           const received = mqttMessageSchema.parse(JSON.parse(message.toString()));
           setMqttData((prev) => ({
-            avianTemp: [...prev.avianTemp, received.sensorOne.temperature],
-            avianHum: [...prev.avianHum, received.sensorOne.humidity],
-            reptTemp: [...prev.reptTemp, received.sensorTwo.temperature],
-            reptHum: [...prev.reptHum, received.sensorTwo.humidity],
+            avianTemp: [...prev.avianTemp, received.avian.temperature],
+            avianHum: [...prev.avianHum, received.avian.humidity],
+            reptTemp: [...prev.reptTemp, received.avian.temperature],
+            reptHum: [...prev.reptHum, received.avian.humidity],
             labels: [...prev.labels, new Date().toLocaleTimeString()],
           }));
         }

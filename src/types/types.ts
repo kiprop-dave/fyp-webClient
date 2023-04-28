@@ -5,16 +5,18 @@ const loginSchema = z.object({
   password: z.string().min(8),
 });
 
-const mqttMessageSchema = z.object({
-  sensorOne: z.object({
-    temperature: z.number().min(0).max(100),
-    humidity: z.number().min(0).max(100),
-  }),
-  sensorTwo: z.object({
-    temperature: z.number().min(0).max(100),
-    humidity: z.number().min(0).max(100),
-  }),
-});
+const mqttMessageSchema = z
+  .object({
+    avian: z.object({
+      temperature: z.number().min(0).max(100),
+      humidity: z.number().min(0).max(100),
+    }),
+    reptilian: z.object({
+      temperature: z.number().min(0).max(100),
+      humidity: z.number().min(0).max(100),
+    }),
+  })
+  .strip();
 
 const readingSchema = z.object({
   _id: z.string(),
