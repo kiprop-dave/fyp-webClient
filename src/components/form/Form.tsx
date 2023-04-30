@@ -55,12 +55,15 @@ function Form() {
       if (error instanceof z.ZodError) {
         setIsError(true);
         setErrorMessage("Invalid email or password");
+        setIsLoading(false);
       } else if (error instanceof AxiosError) {
         setIsError(true);
         setErrorMessage(error.response?.data.message);
+        setIsLoading(false);
       } else {
         setIsError(true);
         setErrorMessage("Something went wrong");
+        setIsLoading(false);
       }
     }
   };
