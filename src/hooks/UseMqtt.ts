@@ -13,8 +13,8 @@ function useMqtt() {
   const { credentials } = auth;
   if (!credentials) return null;
 
-  // const wsUrl = credentials.brokerUrl;
-  const wsUrl = "ws://localhost:8083/mqtt";
+  const wsUrl = credentials.brokerUrl;
+  // const wsUrl = "ws://localhost:8083/mqtt";
   const connectionOptions: mqtt.IClientOptions = {
     clientId: "web-client" + Math.random().toString(16).substring(2, 8),
     clean: false,
