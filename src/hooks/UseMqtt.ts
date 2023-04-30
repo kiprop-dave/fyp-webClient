@@ -13,7 +13,8 @@ function useMqtt() {
   const { credentials } = auth;
   if (!credentials) return null;
 
-  const wsUrl = credentials.brokerUrl;
+  // const wsUrl = credentials.brokerUrl;
+  const wsUrl = "ws://localhost:8083/mqtt";
   const connectionOptions: mqtt.IClientOptions = {
     clientId: "web-client" + Math.random().toString(16).substring(2, 8),
     clean: false,
@@ -36,9 +37,11 @@ function useMqtt() {
     reptHum: [],
     labels: [],
   });
+  const [messageAllert, setMessageAllert] = useState<string>("");
 
   const topics: mqtt.ISubscriptionMap = {
     readings: { qos: 1 },
+    "message/alert": { qos: 1 },
   };
 
   /*
@@ -67,16 +70,19 @@ function useMqtt() {
           setMqttData((prev) => ({
             avianTemp: [...prev.avianTemp, received.avian.temperature],
             avianHum: [...prev.avianHum, received.avian.humidity],
-            reptTemp: [...prev.reptTemp, received.avian.temperature],
-            reptHum: [...prev.reptHum, received.avian.humidity],
+            reptTemp: [...prev.reptTemp, received.reptilian.temperature],
+            reptHum: [...prev.reptHum, received.reptilian.humidity],
             labels: [...prev.labels, new Date().toLocaleTimeString()],
           }));
+        } else if (topic === "message/alert") {
+          console.log(message.toString());
+          setMessageAllert(message.toString());
         }
       });
     }
   }, [mqttClient]);
 
-  return mqttData;
+  return { mqttData, messageAllert };
 }
 
 export default useMqtt;
