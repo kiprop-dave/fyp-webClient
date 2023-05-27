@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const productionUrl = "https://fyp-server-production.up.railway.app";
+// const productionUrl = "https://fyp-server-production.up.railway.app";
+const productionUrl = "https://hatchery.eyefitoptics.gq";
 const developmentUrl = "http://localhost:5000";
 
 const api = axios.create({
